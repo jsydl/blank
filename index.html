@@ -26,16 +26,13 @@
           </p>
         </div>
         <div class="hero-card">
-          <h2>Fast path</h2>
+          <h2>Instructions</h2>
           <ol>
             <li>Fill the form below.</li>
             <li>Download <span class="mono">profile.json</span>.</li>
-            <li>Run the CLI command.</li>
+            <li>Download and run <span class="mono">run_filter.bat</span>.</li>
             <li>Upload the CSV to preview.</li>
           </ol>
-          <div class="command-box">
-            <div class="label">CLI command</div>
-          </div>
         </div>
       </header>
 
@@ -44,7 +41,7 @@
           <h2>Profile builder</h2>
           <form id="profile-form">
             <div class="section">
-              <h3>Student basics</h3>
+              <h3>nt basics</h3>
               <div class="grid">
                 <label class="field">
                   <span>Student name (optional)</span>
@@ -52,7 +49,7 @@
                 </label>
                 <label class="field">
                   <span>Age</span>
-                  <input type="number" id="student-age" min="3" max="19" value="9" />
+                  <input type="number" id="student-age" min="3" max="19" value="11" />
                 </label>
                 <label class="field">
                   <span>Year group (select)</span>
@@ -67,7 +64,7 @@
                     <option>YEAR 2</option>
                     <option>YEAR 3</option>
                     <option>YEAR 4</option>
-                    <option selected>YEAR 5</option>
+                    <option selected>YEAR 10</option>
                     <option>YEAR 6</option>
                     <option>YEAR 7</option>
                     <option>YEAR 8</option>
@@ -166,7 +163,7 @@
               </div>
               <label class="field">
                 <span>Location map (optional JSON)</span>
-                <textarea id="location-map" rows="3">Enter location here</textarea>
+                <textarea id="location-map" rows="3" placeholder="Enter location here"></textarea>
               </label>
             </div>
 
