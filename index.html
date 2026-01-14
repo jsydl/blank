@@ -1,64 +1,339 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Pulseforge</title>
-    <style>
-      :root {
-        /* Prefer Apple's San Francisco on Apple platforms, then other system UI fonts */
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-          system-ui, "Segoe UI", Roboto, Arial, sans-serif;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        font-family: inherit;
-        background: #fff;
-        color: #111;
-        text-align: center;
-        padding: 24px;
-      }
-
-      .card {
-        max-width: 720px;
-        line-height: 1.4;
-      }
-
-      h1 {
-        margin: 0 0 12px;
-        font-size: 32px;
-        font-weight: 700;
-      }
-
-      p {
-        margin: 0;
-        font-size: 18px;
-      }
-
-      a {
-        color: inherit;
-      }
-
-      /* NEW */
-      .card img {
-        display: block;
-        margin: 14px auto 0; /* spacing above image */
-        max-width: 100%;
-        height: auto;
-      }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KHDA Match Builder</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="card">
-      <h1>Domain for Sale</h1>
-      <p>
-        To purchase this domain, inquire through
-        <a href="mailto:pulseforgemarketing@gmail.com">pulseforgemarketing@gmail.com</a>.
-      </p>
+    <div class="page">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">KHDA Match Builder</p>
+          <h1>Build a profile that captures the real priorities.</h1>
+          <p class="lead">
+            Answer once. Generate a clean profile JSON. Run the filter to get a
+            ranked shortlist plus a CSV your LLM can use.
+          </p>
+          <div class="hero-actions">
+            <button class="btn" id="download-profile" type="button">Download profile.json</button>
+            <button class="btn ghost" id="copy-command" type="button">Copy CLI command</button>
+          </div>
+          <p class="hint">
+            Save the JSON into <span class="mono">outputs/profiles</span>, then run the command.
+          </p>
+        </div>
+        <div class="hero-card">
+          <h2>Fast path</h2>
+          <ol>
+            <li>Fill the form below.</li>
+            <li>Download <span class="mono">profile.json</span>.</li>
+            <li>Run the CLI command.</li>
+            <li>Upload the CSV to preview.</li>
+          </ol>
+          <div class="command-box">
+            <div class="label">CLI command</div>
+            <pre id="cli-command" class="mono"></pre>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="card">
+          <h2>Profile builder</h2>
+          <form id="profile-form">
+            <div class="section">
+              <h3>Student basics</h3>
+              <div class="grid">
+                <label class="field">
+                  <span>Student name (optional)</span>
+                  <input type="text" id="student-name" placeholder="Layla" />
+                </label>
+                <label class="field">
+                  <span>Age</span>
+                  <input type="number" id="student-age" min="3" max="19" value="9" />
+                </label>
+                <label class="field">
+                  <span>Year group (select)</span>
+                  <select id="year-group-select">
+                    <option value="">Select year</option>
+                    <option>PRE PRIMARY</option>
+                    <option>FS 1</option>
+                    <option>FS 2</option>
+                    <option>KG 1</option>
+                    <option>KG 2</option>
+                    <option>YEAR 1</option>
+                    <option>YEAR 2</option>
+                    <option>YEAR 3</option>
+                    <option>YEAR 4</option>
+                    <option selected>YEAR 5</option>
+                    <option>YEAR 6</option>
+                    <option>YEAR 7</option>
+                    <option>YEAR 8</option>
+                    <option>YEAR 9</option>
+                    <option>YEAR 10</option>
+                    <option>YEAR 11</option>
+                    <option>YEAR 12</option>
+                    <option>YEAR 13</option>
+                    <option>GRADE 1</option>
+                    <option>GRADE 2</option>
+                    <option>GRADE 3</option>
+                    <option>GRADE 4</option>
+                    <option>GRADE 5</option>
+                    <option>GRADE 6</option>
+                    <option>GRADE 7</option>
+                    <option>GRADE 8</option>
+                    <option>GRADE 9</option>
+                    <option>GRADE 10</option>
+                    <option>GRADE 11</option>
+                    <option>GRADE 12</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Year group (custom)</span>
+                  <input type="text" id="year-group-custom" placeholder="YEAR 5" />
+                </label>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>Budget and value</h3>
+              <div class="grid">
+                <label class="field">
+                  <span>Max budget (AED per year)</span>
+                  <input type="number" id="max-budget" min="0" value="40000" />
+                </label>
+                <label class="field">
+                  <span>Budget buffer percent</span>
+                  <input type="number" id="budget-buffer-percent" step="0.01" value="0.07" />
+                </label>
+                <label class="field">
+                  <span>Budget buffer AED</span>
+                  <input type="number" id="budget-buffer-aed" step="100" value="2500" />
+                </label>
+                <label class="field">
+                  <span>Min overall rating</span>
+                  <select id="min-rating">
+                    <option value="">No minimum</option>
+                    <option>Outstanding</option>
+                    <option>Very good</option>
+                    <option selected>Good</option>
+                    <option>Acceptable</option>
+                    <option>Weak</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>Curriculum fit</h3>
+              <div class="chips">
+                <label><input type="checkbox" value="UK" class="curriculum" checked /> UK</label>
+                <label><input type="checkbox" value="US" class="curriculum" /> US</label>
+                <label><input type="checkbox" value="IB" class="curriculum" checked /> IB</label>
+                <label><input type="checkbox" value="Indian" class="curriculum" /> Indian</label>
+                <label><input type="checkbox" value="MOE" class="curriculum" /> MOE</label>
+                <label><input type="checkbox" value="French" class="curriculum" /> French</label>
+                <label><input type="checkbox" value="German" class="curriculum" /> German</label>
+                <label><input type="checkbox" value="Pakistani" class="curriculum" /> Pakistani</label>
+              </div>
+              <label class="field inline">
+                <span>Strict curriculum match</span>
+                <input type="checkbox" id="strict-curriculum" />
+              </label>
+            </div>
+
+            <div class="section">
+              <h3>Commute</h3>
+              <div class="grid">
+                <label class="field">
+                  <span>Max commute (minutes)</span>
+                  <input type="number" id="commute-max" min="0" value="30" />
+                </label>
+                <label class="field">
+                  <span>Commute speed (km/h)</span>
+                  <input type="number" id="commute-speed" min="1" value="35" />
+                </label>
+                <label class="field">
+                  <span>Home lat</span>
+                  <input type="number" id="home-lat" step="0.0001" value="25.2048" />
+                </label>
+                <label class="field">
+                  <span>Home lon</span>
+                  <input type="number" id="home-lon" step="0.0001" value="55.2708" />
+                </label>
+              </div>
+              <label class="field">
+                <span>Location map (optional JSON)</span>
+                <textarea id="location-map" rows="3">{"deira":{"lat":25.2644,"lon":55.3094},"al garhoud":{"lat":25.2433,"lon":55.3529}}</textarea>
+              </label>
+            </div>
+
+            <div class="section">
+              <h3>Must-haves</h3>
+              <div class="grid">
+                <label class="field inline">
+                  <span>Must offer Arabic</span>
+                  <input type="checkbox" id="must-arabic" checked />
+                </label>
+                <label class="field inline">
+                  <span>Must have bus</span>
+                  <input type="checkbox" id="must-bus" />
+                </label>
+                <label class="field inline">
+                  <span>Must be mixed or girls only</span>
+                  <input type="checkbox" id="must-mixed" />
+                </label>
+                <label class="field inline">
+                  <span>Must be in Dubai only</span>
+                  <input type="checkbox" id="must-dubai" checked />
+                </label>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>Priorities (weights)</h3>
+              <p class="hint">Weights are normalized automatically. Total: <span id="weight-total">0</span></p>
+              <div class="slider-grid">
+                <div class="slider-row">
+                  <label>Overall quality</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-overall" value="0.7" />
+                  <span class="value" data-for="w-overall"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Fees</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-fees" value="0.7" />
+                  <span class="value" data-for="w-fees"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Distance</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-distance" value="0.6" />
+                  <span class="value" data-for="w-distance"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Wellbeing</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-wellbeing" value="0.8" />
+                  <span class="value" data-for="w-wellbeing"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Arabic</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-arabic" value="0.9" />
+                  <span class="value" data-for="w-arabic"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Math</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-math" value="0.2" />
+                  <span class="value" data-for="w-math"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Inclusion / SEND</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-inclusion" value="0.5" />
+                  <span class="value" data-for="w-inclusion"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Leadership</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-leadership" value="0.4" />
+                  <span class="value" data-for="w-leadership"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Curriculum fit</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-curriculum" value="0.8" />
+                  <span class="value" data-for="w-curriculum"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Recency</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-recency" value="0.3" />
+                  <span class="value" data-for="w-recency"></span>
+                </div>
+                <div class="slider-row">
+                  <label>Confidence</label>
+                  <input type="range" min="0" max="1" step="0.05" id="w-confidence" value="0.2" />
+                  <span class="value" data-for="w-confidence"></span>
+                </div>
+              </div>
+              <div class="grid">
+                <label class="field inline">
+                  <span>Strict fees</span>
+                  <input type="checkbox" id="strict-fees" />
+                </label>
+                <label class="field inline">
+                  <span>Strict distance</span>
+                  <input type="checkbox" id="strict-distance" />
+                </label>
+              </div>
+            </div>
+
+            <details class="section">
+              <summary>Advanced diversity controls</summary>
+              <div class="grid">
+                <label class="field">
+                  <span>Budget friendly spots</span>
+                  <input type="number" id="ensure-budget" min="0" value="2" />
+                </label>
+                <label class="field">
+                  <span>Stretch spots</span>
+                  <input type="number" id="ensure-stretch" min="0" value="2" />
+                </label>
+                <label class="field">
+                  <span>Closest spots</span>
+                  <input type="number" id="ensure-closest" min="0" value="2" />
+                </label>
+                <label class="field">
+                  <span>Arabic fit spots</span>
+                  <input type="number" id="ensure-arabic" min="0" value="2" />
+                </label>
+                <label class="field">
+                  <span>Max share per curriculum</span>
+                  <input type="number" id="max-curriculum" step="0.1" value="0.5" />
+                </label>
+                <label class="field">
+                  <span>Max share per location</span>
+                  <input type="number" id="max-location" step="0.1" value="0.4" />
+                </label>
+                <label class="field">
+                  <span>Max share per fee band</span>
+                  <input type="number" id="max-fee" step="0.1" value="0.5" />
+                </label>
+                <label class="field">
+                  <span>Max share per rating band</span>
+                  <input type="number" id="max-rating" step="0.1" value="0.5" />
+                </label>
+              </div>
+            </details>
+          </form>
+        </section>
+
+        <section class="card">
+          <h2>Generated profile</h2>
+          <div class="grid">
+            <label class="field">
+              <span>Profile name</span>
+              <input type="text" id="profile-name" value="web_profile" />
+            </label>
+            <label class="field">
+              <span>Input JSONL path</span>
+              <input type="text" id="jsonl-path" value="data/raw/khda_schools_YYYYMMDD_HHMMSS.jsonl" />
+            </label>
+          </div>
+          <pre id="profile-json" class="code-block"></pre>
+          <p class="hint">
+            Save the file as <span class="mono" id="profile-path-label"></span>
+          </p>
+        </section>
+
+        <section class="card">
+          <h2>CSV preview</h2>
+          <p class="hint">
+            After running the filter, upload the generated CSV to preview the shortlist.
+          </p>
+          <input type="file" id="csv-input" accept=".csv" />
+          <div class="table-wrap">
+            <table id="csv-table"></table>
+          </div>
+        </section>
+      </main>
     </div>
+    <script src="app.js"></script>
   </body>
 </html>
